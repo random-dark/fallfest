@@ -38,25 +38,20 @@ def model_predict(file, model):
 
 def save_image(url):
     response =request.get(url)
-    if response.status_code=200:
+    if response.status_code == 200:
         with open("img.png",'wb') as f:
            f.write(response.content)
 
 
-@app.route('/predict1', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def upload():
-    #f = request.files['file']
     skin_lesion=request.get_json()
-#    print(skin_lesion)
     image_url=skin_lesion['url']
-    print(skin_lesion['url'])
-    save_image('url')
-#    f="img.png"
+    print(image_url)
+    save_image(image_url)
     labs= ['MELANOMA', 'MELANOCYTIC NEVUS', 'BASAL CELL CARCINOMA', 'ACTINIC KERATOSIS', 'BENIGN KERATOSIS', 'DERMATOFIBROMA', 'VASCULAR LESION', 'SQUAMOUS CELL CARCINOMA']
-
     preds = model_predict(image_url, model)
     result = labs[preds]
-#    print(jsonify({'result':result}))
     return jsonify({'result':result})
 
 if __name__ == '__main__':
